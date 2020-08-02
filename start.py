@@ -6,23 +6,17 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 import MySQLdb
 from MySQLdb import Error
 
 try:
-    _fromUtf8 = QtCore.QString.fromUtf8
-except AttributeError:
-    def _fromUtf8(s):
-        return s
-
-try:
-    _encoding = QtGui.QApplication.UnicodeUTF8
+    _encoding = QtWidgets.QApplication.UnicodeUTF8
     def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+        return QtCore.QCoreApplication.translate(context, text, disambig, _encoding)
 except AttributeError:
     def _translate(context, text, disambig):
-        return QtGui.QApplication.translate(context, text, disambig)
+        return QtCore.QCoreApplication.translate(context, text, disambig)
 
 class Ui_Form(object):
 
@@ -30,7 +24,7 @@ class Ui_Form(object):
         self.total= 0.0
         self.grand_total= 0.0
         try:
-            self.con = MySQLdb.connect(host="localhost",user="root",passwd="pccoe",db="invoice_system")
+            self.con = MySQLdb.connect(host="localhost",user="****",passwd="****",db="invoice_system")
 
             if (self.con.open):
                 print ("connected")
@@ -47,7 +41,7 @@ class Ui_Form(object):
                 print ("Not connected")
 
         except Error as e:
-            print(e)
+            print (e)
 
     def reset_all(self):
         self.tableWidget.setRowCount(0)
@@ -296,10 +290,15 @@ class Ui_Form(object):
 
     def get_values_from_table(self):
         client= self.lineEdit_5.text()
+        allRows = self.tableWidget.rowCount()
         if(client == ""):
             self.msg.setInformativeText("Client Name cannot be empty")
             self.msg.setWindowTitle("Empty Client Name")
             self.showdialog()
+        elif(allRows == 0):
+        	self.msg.setInformativeText("All fields are necessary")
+        	self.msg.setWindowTitle("Empty Fields")
+        	self.showdialog()
         else:
             output= ''' 
             <html>
@@ -459,7 +458,7 @@ class Ui_Form(object):
             <tbody>'''
             self.cur.execute('insert into invoices values ("%d" , "%s" , "%s" , "%s" )' % (self.invoice_id , str(client) , str(self.grand_total), str(date.today())))
             self.con.commit()
-            allRows = self.tableWidget.rowCount()
+
             for row in xrange(0,allRows):
                 name = self.tableWidget.item(row,0)
                 description = self.tableWidget.item(row,1)
@@ -474,6 +473,8 @@ class Ui_Form(object):
                 </tr>'''
                 self.cur.execute('insert into individual_invoice_details values ("%d" , "%s" , "%s" , "%s", "%s" )' % (self.invoice_id , str(name.text()) , str(price.text()), int(qty.text()), str(description.text())))
                 self.con.commit()
+            csgt_amt= float(self.total) * 0.06
+            sgst_amt= float(self.total) * 0.06
             output+= '''</tbody>
             </table>
             <table class="balance">
@@ -482,8 +483,12 @@ class Ui_Form(object):
             <td><span data-prefix>Rs </span><span>'''+str(self.total)+''' /-</span></td>
             </tr>
             <tr>
-            <th><span>CGST (@ 9%) + SGST (@ 9%)</span></th>
-            <td><span data-prefix></span><span>18 %</span></td>
+            <th><span>CGST (@ 6%)</span></th>
+            <td><span data-prefix>Rs </span><span>'''+str(csgt_amt)+'''</span></td>
+            </tr>
+            <tr>
+            <th><span>SGST (@ 6%)</span></th>
+            <td><span data-prefix>Rs </span><span>'''+str(sgst_amt)+'''</span></td>
             </tr>
             <tr>
             <th><span>Grand Total</span></th>
@@ -544,16 +549,15 @@ class Ui_Form(object):
         try:
             qty= int(self.lineEdit_3.text())
             price= float(self.lineEdit_4.text())
+            self.total= float(self.lineEdit_6.text())
+            self.grand_total= float(self.lineEdit_8.text())
+            cur_price= qty*price
+            self.total+= cur_price
+            self.grand_total= self.total + (self.total*0.12)
         except Exception as e:
             self.msg.setInformativeText("Qty and Price should be numeric")
             self.msg.setWindowTitle("Invalid values")
             self.showdialog()
-        tax= 18
-        self.total= float(self.lineEdit_6.text())
-        self.grand_total= float(self.lineEdit_8.text())
-        cur_price= qty*price
-        self.total+= cur_price
-        self.grand_total= self.total + (self.total*0.18)
 
         if (name == "" or description =="" or qty=="" or price == ""):
             self.msg.setInformativeText("All fields are necessary")
@@ -562,10 +566,10 @@ class Ui_Form(object):
         else:
             rowPosition= self.tableWidget.rowCount()
             self.tableWidget.insertRow(rowPosition)
-            self.tableWidget.setItem(rowPosition , 0, QtGui.QTableWidgetItem(name))
-            self.tableWidget.setItem(rowPosition , 1, QtGui.QTableWidgetItem(description))
-            self.tableWidget.setItem(rowPosition , 2, QtGui.QTableWidgetItem(str(qty)))
-            self.tableWidget.setItem(rowPosition , 3, QtGui.QTableWidgetItem(str(price)))
+            self.tableWidget.setItem(rowPosition , 0, QtWidgets.QTableWidgetItem(name))
+            self.tableWidget.setItem(rowPosition , 1, QtWidgets.QTableWidgetItem(description))
+            self.tableWidget.setItem(rowPosition , 2, QtWidgets.QTableWidgetItem(str(qty)))
+            self.tableWidget.setItem(rowPosition , 3, QtWidgets.QTableWidgetItem(str(price)))
             self.lineEdit_6.setText(_translate("Form", str(self.total), None))
             self.lineEdit_8.setText(_translate("Form", str(self.grand_total), None))
             self.lineEdit.setText("")
@@ -576,137 +580,137 @@ class Ui_Form(object):
 
 
     def setupUi(self, Form):
-        Form.setObjectName(_fromUtf8("Form"))
+        Form.setObjectName("Form")
         Form.resize(685, 457)
         Form.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
-        self.pushButton = QtGui.QPushButton(Form)
+        self.pushButton = QtWidgets.QPushButton(Form)
         self.pushButton.setGeometry(QtCore.QRect(570, 420, 97, 27))
-        self.pushButton.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.pushButton.setObjectName(_fromUtf8("pushButton"))
-        self.pushButton_2 = QtGui.QPushButton(Form)
+        self.pushButton.setStyleSheet("color: rgb(0, 0, 0);")
+        self.pushButton.setObjectName("pushButton")
+        self.pushButton_2 = QtWidgets.QPushButton(Form)
         self.pushButton_2.setGeometry(QtCore.QRect(460, 420, 97, 27))
-        self.pushButton_2.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
-        self.lineEdit = QtGui.QLineEdit(Form)
+        self.pushButton_2.setStyleSheet("color: rgb(0, 0, 0);")
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.lineEdit = QtWidgets.QLineEdit(Form)
         self.lineEdit.setGeometry(QtCore.QRect(30, 190, 113, 27))
-        self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
-        self.lineEdit_2 = QtGui.QLineEdit(Form)
+        self.lineEdit.setObjectName("lineEdit")
+        self.lineEdit_2 = QtWidgets.QLineEdit(Form)
         self.lineEdit_2.setGeometry(QtCore.QRect(150, 190, 251, 27))
-        self.lineEdit_2.setObjectName(_fromUtf8("lineEdit_2"))
-        self.lineEdit_3 = QtGui.QLineEdit(Form)
+        self.lineEdit_2.setObjectName("lineEdit_2")
+        self.lineEdit_3 = QtWidgets.QLineEdit(Form)
         self.lineEdit_3.setGeometry(QtCore.QRect(410, 190, 81, 27))
         self.lineEdit_3.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
-        self.lineEdit_3.setObjectName(_fromUtf8("lineEdit_3"))
-        self.lineEdit_4 = QtGui.QLineEdit(Form)
+        self.lineEdit_3.setObjectName("lineEdit_3")
+        self.lineEdit_4 = QtWidgets.QLineEdit(Form)
         self.lineEdit_4.setGeometry(QtCore.QRect(500, 190, 61, 27))
-        self.lineEdit_4.setObjectName(_fromUtf8("lineEdit_4"))
-        self.pushButton_3 = QtGui.QPushButton(Form)
+        self.lineEdit_4.setObjectName("lineEdit_4")
+        self.pushButton_3 = QtWidgets.QPushButton(Form)
         self.pushButton_3.setGeometry(QtCore.QRect(570, 190, 97, 27))
-        self.pushButton_3.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.pushButton_3.setObjectName(_fromUtf8("pushButton_3"))
-        self.dateTimeEdit = QtGui.QDateTimeEdit(Form)
+        self.pushButton_3.setStyleSheet("color: rgb(0, 0, 0);")
+        self.pushButton_3.setObjectName("pushButton_3")
+        self.dateTimeEdit = QtWidgets.QDateTimeEdit(Form)
         self.dateTimeEdit.setReadOnly(True)
         self.dateTimeEdit.setGeometry(QtCore.QRect(480, 10, 194, 27))
-        self.dateTimeEdit.setObjectName(_fromUtf8("dateTimeEdit"))
+        self.dateTimeEdit.setObjectName("dateTimeEdit")
         self.dateTimeEdit.setDateTime(QtCore.QDateTime.currentDateTime())
-        self.label = QtGui.QLabel(Form)
+        self.label = QtWidgets.QLabel(Form)
         self.label.setGeometry(QtCore.QRect(40, 170, 101, 17))
-        self.label.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.label.setObjectName(_fromUtf8("label"))
-        self.label_2 = QtGui.QLabel(Form)
+        self.label.setStyleSheet("color: rgb(0, 0, 0);")
+        self.label.setObjectName("label")
+        self.label_2 = QtWidgets.QLabel(Form)
         self.label_2.setGeometry(QtCore.QRect(210, 170, 141, 17))
-        self.label_2.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.label_2.setObjectName(_fromUtf8("label_2"))
-        self.label_3 = QtGui.QLabel(Form)
+        self.label_2.setStyleSheet("color: rgb(0, 0, 0);")
+        self.label_2.setObjectName("label_2")
+        self.label_3 = QtWidgets.QLabel(Form)
         self.label_3.setGeometry(QtCore.QRect(430, 170, 31, 17))
-        self.label_3.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.label_3.setObjectName(_fromUtf8("label_3"))
-        self.label_4 = QtGui.QLabel(Form)
+        self.label_3.setStyleSheet("color: rgb(0, 0, 0);")
+        self.label_3.setObjectName("label_3")
+        self.label_4 = QtWidgets.QLabel(Form)
         self.label_4.setGeometry(QtCore.QRect(510, 170, 41, 17))
-        self.label_4.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.label_4.setObjectName(_fromUtf8("label_4"))
-        self.label_5 = QtGui.QLabel(Form)
+        self.label_4.setStyleSheet("color: rgb(0, 0, 0);")
+        self.label_4.setObjectName("label_4")
+        self.label_5 = QtWidgets.QLabel(Form)
         self.label_5.setGeometry(QtCore.QRect(380, 110, 21, 21))
-        self.label_5.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.label_5.setObjectName(_fromUtf8("label_5"))
-        self.lineEdit_5 = QtGui.QLineEdit(Form)
+        self.label_5.setStyleSheet("color: rgb(0, 0, 0);")
+        self.label_5.setObjectName("label_5")
+        self.lineEdit_5 = QtWidgets.QLineEdit(Form)
         self.lineEdit_5.setGeometry(QtCore.QRect(410, 110, 241, 27))
-        self.lineEdit_5.setObjectName(_fromUtf8("lineEdit_5"))
-        self.label_6 = QtGui.QLabel(Form)
+        self.lineEdit_5.setObjectName("lineEdit_5")
+        self.label_6 = QtWidgets.QLabel(Form)
         self.label_6.setGeometry(QtCore.QRect(480, 90, 111, 17))
-        self.label_6.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.label_6.setObjectName(_fromUtf8("label_6"))
-        self.tableWidget = QtGui.QTableWidget(Form)
+        self.label_6.setStyleSheet("color: rgb(0, 0, 0);")
+        self.label_6.setObjectName("label_6")
+        self.tableWidget = QtWidgets.QTableWidget(Form)
         self.tableWidget.setEnabled(True)
         self.tableWidget.setGeometry(QtCore.QRect(30, 230, 611, 111))
-        self.tableWidget.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self.tableWidget.setRowCount(0)
         self.tableWidget.setColumnCount(4)
-        self.tableWidget.setObjectName(_fromUtf8("tableWidget"))
+        self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.horizontalHeader().setVisible(False)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(150)
         self.tableWidget.horizontalHeader().setHighlightSections(False)
         self.tableWidget.verticalHeader().setVisible(True)
-        self.lineEdit_6 = QtGui.QLineEdit(Form)
+        self.lineEdit_6 = QtWidgets.QLineEdit(Form)
         self.lineEdit_6.setEnabled(False)
         self.lineEdit_6.setGeometry(QtCore.QRect(480, 350, 113, 27))
-        self.lineEdit_6.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
+        self.lineEdit_6.setStyleSheet("color: rgb(0, 0, 0);")
         self.lineEdit_6.setReadOnly(True)
-        self.lineEdit_6.setObjectName(_fromUtf8("lineEdit_6"))
-        self.lineEdit_7 = QtGui.QLineEdit(Form)
+        self.lineEdit_6.setObjectName("lineEdit_6")
+        self.lineEdit_7 = QtWidgets.QLineEdit(Form)
         self.lineEdit_7.setEnabled(False)
         self.lineEdit_7.setGeometry(QtCore.QRect(600, 350, 61, 27))
-        self.lineEdit_7.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
+        self.lineEdit_7.setStyleSheet("color: rgb(0, 0, 0);")
         self.lineEdit_7.setReadOnly(True)
-        self.lineEdit_7.setObjectName(_fromUtf8("lineEdit_7"))
-        self.lineEdit_8 = QtGui.QLineEdit(Form)
+        self.lineEdit_7.setObjectName("lineEdit_7")
+        self.lineEdit_8 = QtWidgets.QLineEdit(Form)
         self.lineEdit_8.setEnabled(False)
         self.lineEdit_8.setGeometry(QtCore.QRect(480, 380, 131, 27))
-        self.lineEdit_8.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
+        self.lineEdit_8.setStyleSheet("color: rgb(0, 0, 0);")
         self.lineEdit_8.setReadOnly(True)
-        self.lineEdit_8.setObjectName(_fromUtf8("lineEdit_8"))
-        self.label_7 = QtGui.QLabel(Form)
+        self.lineEdit_8.setObjectName("lineEdit_8")
+        self.label_7 = QtWidgets.QLabel(Form)
         self.label_7.setGeometry(QtCore.QRect(400, 350, 71, 31))
-        self.label_7.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.label_7.setObjectName(_fromUtf8("label_7"))
-        self.label_8 = QtGui.QLabel(Form)
+        self.label_7.setStyleSheet("color: rgb(0, 0, 0);")
+        self.label_7.setObjectName("label_7")
+        self.label_8 = QtWidgets.QLabel(Form)
         self.label_8.setGeometry(QtCore.QRect(390, 380, 111, 31))
-        self.label_8.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.label_8.setObjectName(_fromUtf8("label_8"))
-        self.label_9 = QtGui.QLabel(Form)
+        self.label_8.setStyleSheet("color: rgb(0, 0, 0);")
+        self.label_8.setObjectName("label_8")
+        self.label_9 = QtWidgets.QLabel(Form)
         self.label_9.setGeometry(QtCore.QRect(620, 380, 31, 21))
-        self.label_9.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.label_9.setObjectName(_fromUtf8("label_9"))
-        self.msg = QtGui.QMessageBox()
-        self.msg.setIcon(QtGui.QMessageBox.Warning)
+        self.label_9.setStyleSheet("color: rgb(0, 0, 0);")
+        self.label_9.setObjectName("label_9")
+        self.msg = QtWidgets.QMessageBox()
+        self.msg.setIcon(QtWidgets.QMessageBox.Warning)
         self.msg.setText("Alert")
-        self.msg.setStandardButtons(QtGui.QMessageBox.Ok)
-        self.label_10 = QtGui.QLabel(Form)
+        self.msg.setStandardButtons(QtWidgets.QMessageBox.Ok)
+        self.label_10 = QtWidgets.QLabel(Form)
         self.label_10.setGeometry(QtCore.QRect(40, 20, 301, 61))
-        self.label_10.setStyleSheet(_fromUtf8("font: 75 20pt \"Ubuntu\";\n"
-"color: rgb(0, 0, 0);"))
-        self.label_10.setObjectName(_fromUtf8("label_10"))
-        self.label_11 = QtGui.QLabel(Form)
-        self.label_11.setGeometry(QtCore.QRect(60, 70, 341, 31))
-        self.label_11.setStyleSheet(_fromUtf8("font: 75 oblique 9pt \"Umpush\";"))
-        self.label_11.setObjectName(_fromUtf8("label_11"))
-        self.graphicsView = QtGui.QGraphicsView(Form)
+        self.label_10.setStyleSheet("font: 75 12pt \"Ubuntu\";\n"
+"color: rgb(0, 0, 0);")
+        self.label_10.setObjectName("label_10")
+        self.label_11 = QtWidgets.QLabel(Form)
+        self.label_11.setGeometry(QtCore.QRect(40, 70, 341, 31))
+        self.label_11.setStyleSheet("font: 75 oblique 7pt \"Umpush\";")
+        self.label_11.setObjectName("label_11")
+        self.graphicsView = QtWidgets.QGraphicsView(Form)
         self.graphicsView.setGeometry(QtCore.QRect(30, 20, 311, 91))
-        self.graphicsView.setStyleSheet(_fromUtf8("background-color: rgb(229, 229, 229);"))
-        self.graphicsView.setObjectName(_fromUtf8("graphicsView"))
-        self.label_12 = QtGui.QLabel(Form)
+        self.graphicsView.setStyleSheet("background-color: rgb(229, 229, 229);")
+        self.graphicsView.setObjectName("graphicsView")
+        self.label_12 = QtWidgets.QLabel(Form)
         self.label_12.setGeometry(QtCore.QRect(70, 370, 131, 17))
-        self.label_12.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.label_12.setObjectName(_fromUtf8("label_12"))
-        self.pushButton_4 = QtGui.QPushButton(Form)
+        self.label_12.setStyleSheet("color: rgb(0, 0, 0);")
+        self.label_12.setObjectName("label_12")
+        self.pushButton_4 = QtWidgets.QPushButton(Form)
         self.pushButton_4.setGeometry(QtCore.QRect(190, 390, 51, 27))
-        self.pushButton_4.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
+        self.pushButton_4.setStyleSheet("color: rgb(0, 0, 0);")
         self.pushButton_4.setFlat(False)
-        self.pushButton_4.setObjectName(_fromUtf8("pushButton_4"))
-        self.qcombobox = QtGui.QComboBox(Form)
+        self.pushButton_4.setObjectName("pushButton_4")
+        self.qcombobox = QtWidgets.QComboBox(Form)
         self.qcombobox.setGeometry(QtCore.QRect(80, 390, 100, 27))
-        self.qcombobox.setStyleSheet(_fromUtf8("color: rgb(0, 0, 0);"))
-        self.qcombobox.setObjectName(_fromUtf8("qcombobox"))
+        self.qcombobox.setStyleSheet("color: rgb(0, 0, 0);")
+        self.qcombobox.setObjectName("qcombobox")
         self.qcombobox.addItem("Select Bill")
         for id in self.all_past_invoice_ids:
             self.qcombobox.addItem(str(id))
@@ -749,10 +753,9 @@ if __name__ == "__main__":
     import sys
     from datetime import date
     import webbrowser, os
-    app = QtGui.QApplication(sys.argv)
-    Form = QtGui.QWidget()
+    app = QtWidgets.QApplication(sys.argv)
+    Form = QtWidgets.QWidget()
     ui = Ui_Form()
     ui.setupUi(Form)
     Form.show()
     sys.exit(app.exec_())
-
