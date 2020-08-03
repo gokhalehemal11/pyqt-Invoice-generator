@@ -106,7 +106,7 @@ class Ui_Form(object):
                            <p>CHEMITECH INDUSTRIES</p>
                         </b>
                         <p>Survey No. 164/A, Nigdi Talawade Road,<br>Talawade, Pune - 411 062</p>
-                        <p>Mob. : 9422304951 / 8446357726, <br>Email : chemitechindustries@gmail.com</p>
+                        <p>Mob. : 8446357726 / 9422304951, <br>Email : chemitechindustries@gmail.com</p>
                         <p><b>GSTIN : 27EXJPP7938C1ZZ</b></p>
                      </address>
                   </header>
@@ -167,7 +167,7 @@ class Ui_Form(object):
                            <p>CHEMITECH INDUSTRIES</p>
                         </b>
                         <p>Survey No. 164/A, Nigdi Talawade Road,<br>Talawade, Pune - 411 062</p>
-                        <p>Mob. : 9422304951 / 8446357726, <br>Email : chemitechindustries@gmail.com</p>
+                        <p>Mob. : 8446357726 / 9422304951, <br>Email : chemitechindustries@gmail.com</p>
                         <p><b>GSTIN : 27EXJPP7938C1ZZ</b></p>
                      </address>
                   </header>
@@ -234,7 +234,7 @@ class Ui_Form(object):
                            <p>CHEMITECH INDUSTRIES</p>
                         </b>
                         <p>Survey No. 164/A, Nigdi Talawade Road,<br>Talawade, Pune - 411 062</p>
-                        <p>Mob. : 9422304951 / 8446357726, <br>Email : chemitechindustries@gmail.com</p>
+                        <p>Mob. : 8446357726 / 9422304951, <br>Email : chemitechindustries@gmail.com</p>
                         <p><b>GSTIN : 27EXJPP7938C1ZZ</b></p>
                      </address>
                   </header>
@@ -521,7 +521,7 @@ class Ui_Form(object):
                            <p>CHEMITECH INDUSTRIES</p>
                         </b>
                         <p>Survey No. 164/A, Nigdi Talawade Road,<br>Talawade, Pune - 411 062</p>
-                        <p>Mob. : 9422304951 / 8446357726, <br>Email : chemitechindustries@gmail.com</p>
+                        <p>Mob. : 8446357726 / 9422304951, <br>Email : chemitechindustries@gmail.com</p>
                         <p><b>GSTIN : 27EXJPP7938C1ZZ</b></p>
                      </address>
             </header>
