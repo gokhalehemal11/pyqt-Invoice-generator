@@ -20,8 +20,8 @@ class Ui_Form(object):
         self.sgst_total= 0.0
         self.actual_thick= ""
         try:
-            self.con = MySQLdb.connect(host="13.235.81.57",user="remote",passwd="Remote@Pass_123",db="invoice_system")
-            #self.con = MySQLdb.connect(host="localhost",user="root",passwd="pccoe",db="invoice_system")
+            #self.con = MySQLdb.connect(host="13.235.81.57",user="remote",passwd="Remote@Pass_123",db="invoice_system")
+            self.con = MySQLdb.connect(host="localhost",user="root",passwd="pccoe",db="invoice_system")
 
             if (self.con.open):
                 print ("connected")
