@@ -424,8 +424,8 @@ class Ui_Form(object):
             file.close()
             self.invoice_id+= 1
             self.all_past_invoice_ids.append(str(self.invoice_id))
-            #self.completer = QtWidgets.QCompleter(self.all_past_invoice_ids)
-            #self.comboBox.setCompleter(self.completer)
+            self.completer = QtWidgets.QCompleter(self.all_past_invoice_ids)
+            self.comboBox.setCompleter(self.completer)
             webbrowser.open_new_tab('file:///'+os.getcwd()+'/Test_Certificate/' + filename1)
             webbrowser.open_new_tab('file:///'+os.getcwd()+'/GST_invoice/' + filename2)
             webbrowser.open_new_tab('file:///'+os.getcwd()+'/Delivery_Chalan/' + filename3)
