@@ -424,8 +424,8 @@ class Ui_Form(object):
             file.close()
             self.invoice_id+= 1
             self.all_past_invoice_ids.append(str(self.invoice_id))
-            self.completer = QtWidgets.QCompleter(self.all_past_invoice_ids)
-            self.comboBox.setCompleter(self.completer)
+            #self.completer = QtWidgets.QCompleter(self.all_past_invoice_ids)
+            #self.comboBox.setCompleter(self.completer)
             webbrowser.open_new_tab('file:///'+os.getcwd()+'/Test_Certificate/' + filename1)
             webbrowser.open_new_tab('file:///'+os.getcwd()+'/GST_invoice/' + filename2)
             webbrowser.open_new_tab('file:///'+os.getcwd()+'/Delivery_Chalan/' + filename3)
@@ -688,7 +688,10 @@ class Ui_Form(object):
         self.pushButton_4.setStyleSheet("color: rgb(0, 0, 0);")
         self.pushButton_4.setFlat(False)
         self.pushButton_4.setObjectName("pushButton_4")
-        self.part_no_completer= QtWidgets.QCompleter(self.all_past_part_nos)
+        try:
+            self.part_no_completer= QtWidgets.QCompleter(self.all_past_part_nos)
+        except Exception as e:
+            print(e)
         self.part_no = QtWidgets.QLineEdit(Form)
         self.part_no.setGeometry(QtCore.QRect(20, 180, 113, 27))
         self.part_no.setStyleSheet("color: rgb(0, 0, 0);")
@@ -730,12 +733,18 @@ class Ui_Form(object):
         self.sac.setGeometry(QtCore.QRect(550, 240, 111, 27))
         self.sac.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
         self.sac.setObjectName("sac")
-        self.client_completer= QtWidgets.QCompleter(self.all_clients)
+        try:
+            self.client_completer= QtWidgets.QCompleter(self.all_clients)
+        except Exception as e:
+            self.client_completer= QtWidgets.QCompleter([])
         self.client = QtWidgets.QLineEdit(Form)
         self.client.setGeometry(QtCore.QRect(630, 80, 241, 27))
         self.client.setObjectName("client")
         self.client.setCompleter(self.client_completer)
-        self.gst_completer= QtWidgets.QCompleter(self.all_gst)
+        try:
+            self.gst_completer= QtWidgets.QCompleter(self.all_gst)
+        except Exception as e:
+            self.gst_completer= QtWidgets.QCompleter([])
         self.gst = QtWidgets.QLineEdit(Form)
         self.gst.setGeometry(QtCore.QRect(630, 110, 241, 27))
         self.gst.setObjectName("gst")
@@ -866,7 +875,10 @@ class Ui_Form(object):
         self.label_19.setGeometry(QtCore.QRect(30, 220, 71, 17))
         self.label_19.setStyleSheet("color: rgb(0, 0, 0);")
         self.label_19.setObjectName("label_19")
-        self.completer = QtWidgets.QCompleter(self.all_past_invoice_ids)
+        try:
+            self.completer = QtWidgets.QCompleter(self.all_past_invoice_ids)
+        except Exception as e:
+            self.completer = QtWidgets.QCompleter([])
         self.comboBox = QtWidgets.QLineEdit(Form)
         self.comboBox.setGeometry(QtCore.QRect(50, 470, 91, 31))
         self.comboBox.setObjectName("comboBox")
