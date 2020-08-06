@@ -691,7 +691,7 @@ class Ui_Form(object):
         try:
             self.part_no_completer= QtWidgets.QCompleter(self.all_past_part_nos)
         except Exception as e:
-            print(e)
+            self.part_no_completer= QtWidgets.QCompleter([])
         self.part_no = QtWidgets.QLineEdit(Form)
         self.part_no.setGeometry(QtCore.QRect(20, 180, 113, 27))
         self.part_no.setStyleSheet("color: rgb(0, 0, 0);")
