@@ -20,8 +20,8 @@ class Ui_Form(object):
         self.sgst_total= 0.0
         self.actual_thick= ""
         try:
-            self.con = MySQLdb.connect(host="13.235.81.57",user="remote",passwd="Remote@Pass_123",db="invoice_system")
-            #self.con = MySQLdb.connect(host="localhost",user="root",passwd="pccoe",db="invoice_system")
+            #self.con = MySQLdb.connect(host="13.235.81.57",user="remote",passwd="Remote@Pass_123",db="invoice_system")
+            self.con = MySQLdb.connect(host="localhost",user="root",passwd="pccoe",db="invoice_system")
 
             if (self.con.open):
                 print ("connected")
@@ -106,7 +106,7 @@ class Ui_Form(object):
                            <p>CHEMITECH INDUSTRIES</p>
                         </b>
                         <p>Survey No. 164/A, Nigdi Talawade Road,<br>Talawade, Pune - 411 062</p>
-                        <p>Mob. : 8446357726 / 9422304951, <br>Email : chemitechindustries@gmail.com</p>
+                        <p>Mob. : 9422304951 / 8446357726, <br>Email : chemitechindustries@gmail.com</p>
                         <p><b>GSTIN : 27EXJPP7938C1ZZ</b></p>
                      </address>
                   </header>
@@ -167,7 +167,7 @@ class Ui_Form(object):
                            <p>CHEMITECH INDUSTRIES</p>
                         </b>
                         <p>Survey No. 164/A, Nigdi Talawade Road,<br>Talawade, Pune - 411 062</p>
-                        <p>Mob. : 8446357726 / 9422304951, <br>Email : chemitechindustries@gmail.com</p>
+                        <p>Mob. : 9422304951 / 8446357726, <br>Email : chemitechindustries@gmail.com</p>
                         <p><b>GSTIN : 27EXJPP7938C1ZZ</b></p>
                      </address>
                   </header>
@@ -234,7 +234,7 @@ class Ui_Form(object):
                            <p>CHEMITECH INDUSTRIES</p>
                         </b>
                         <p>Survey No. 164/A, Nigdi Talawade Road,<br>Talawade, Pune - 411 062</p>
-                        <p>Mob. : 8446357726 / 9422304951, <br>Email : chemitechindustries@gmail.com</p>
+                        <p>Mob. : 9422304951 / 8446357726, <br>Email : chemitechindustries@gmail.com</p>
                         <p><b>GSTIN : 27EXJPP7938C1ZZ</b></p>
                      </address>
                   </header>
@@ -521,7 +521,7 @@ class Ui_Form(object):
                            <p>CHEMITECH INDUSTRIES</p>
                         </b>
                         <p>Survey No. 164/A, Nigdi Talawade Road,<br>Talawade, Pune - 411 062</p>
-                        <p>Mob. : 8446357726 / 9422304951, <br>Email : chemitechindustries@gmail.com</p>
+                        <p>Mob. : 9422304951 / 8446357726, <br>Email : chemitechindustries@gmail.com</p>
                         <p><b>GSTIN : 27EXJPP7938C1ZZ</b></p>
                      </address>
             </header>
@@ -688,10 +688,7 @@ class Ui_Form(object):
         self.pushButton_4.setStyleSheet("color: rgb(0, 0, 0);")
         self.pushButton_4.setFlat(False)
         self.pushButton_4.setObjectName("pushButton_4")
-        try:
-            self.part_no_completer= QtWidgets.QCompleter(self.all_past_part_nos)
-        except Exception as e:
-            self.part_no_completer= QtWidgets.QCompleter([])
+        self.part_no_completer= QtWidgets.QCompleter(self.all_past_part_nos)
         self.part_no = QtWidgets.QLineEdit(Form)
         self.part_no.setGeometry(QtCore.QRect(20, 180, 113, 27))
         self.part_no.setStyleSheet("color: rgb(0, 0, 0);")
@@ -733,18 +730,12 @@ class Ui_Form(object):
         self.sac.setGeometry(QtCore.QRect(550, 240, 111, 27))
         self.sac.setInputMethodHints(QtCore.Qt.ImhDigitsOnly)
         self.sac.setObjectName("sac")
-        try:
-            self.client_completer= QtWidgets.QCompleter(self.all_clients)
-        except Exception as e:
-            self.client_completer= QtWidgets.QCompleter([])
+        self.client_completer= QtWidgets.QCompleter(self.all_clients)
         self.client = QtWidgets.QLineEdit(Form)
         self.client.setGeometry(QtCore.QRect(630, 80, 241, 27))
         self.client.setObjectName("client")
         self.client.setCompleter(self.client_completer)
-        try:
-            self.gst_completer= QtWidgets.QCompleter(self.all_gst)
-        except Exception as e:
-            self.gst_completer= QtWidgets.QCompleter([])
+        self.gst_completer= QtWidgets.QCompleter(self.all_gst)
         self.gst = QtWidgets.QLineEdit(Form)
         self.gst.setGeometry(QtCore.QRect(630, 110, 241, 27))
         self.gst.setObjectName("gst")
@@ -875,10 +866,7 @@ class Ui_Form(object):
         self.label_19.setGeometry(QtCore.QRect(30, 220, 71, 17))
         self.label_19.setStyleSheet("color: rgb(0, 0, 0);")
         self.label_19.setObjectName("label_19")
-        try:
-            self.completer = QtWidgets.QCompleter(self.all_past_invoice_ids)
-        except Exception as e:
-            self.completer = QtWidgets.QCompleter([])
+        self.completer = QtWidgets.QCompleter(self.all_past_invoice_ids)
         self.comboBox = QtWidgets.QLineEdit(Form)
         self.comboBox.setGeometry(QtCore.QRect(50, 470, 91, 31))
         self.comboBox.setObjectName("comboBox")
